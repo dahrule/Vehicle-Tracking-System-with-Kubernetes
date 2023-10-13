@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  creationTimestamp: null
+
+  labels:
+
+    app: tracking-server
+
+  name: tracking-server
+
+spec:
+
+  replicas: 1
+
+  selector:
+
+    matchLabels:
+
+      app: tracking-server
+
+  strategy: {}
+
+  template:
+
+    metadata:
+
+      creationTimestamp: null
+
+      labels:
+
+        app: tracking-server
+
+    spec:
+
+      containers:
+
+      - image: dahrule/tracking-server:latest #sergioarmgpl/tracking_server
+
+        name: tracking-server
+
+        imagePullPolicy: Always
+
+        env:
+
+        - name: MONGO_URI
+
+          value: "mongodb://admin:centennial@mongo/mydatabase?authSource=admin"
+
+        - name: MONGO_DB
+
+          value: "mydatabase"
+
+        - name: TIMEZONE
+
+          value: "Canada/Central"
+        
+        - name: LATITUDE
+          value: "43.82399857498332"
+
+        - name: LONGITUDE   
+          value: "-79.21156339275579"
+
+        - name: TRACKING_SERVER 
+          value: "52.228.113.29"
+
+        resources: {}
+
+status: {}

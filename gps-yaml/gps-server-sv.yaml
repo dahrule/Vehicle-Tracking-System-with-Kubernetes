@@ -1,0 +1,33 @@
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  creationTimestamp: null
+
+  labels:
+
+    app: gps-server
+
+  name: gps-server-lb
+
+spec:
+
+  ports:
+
+  - port: 3000
+
+    protocol: TCP
+
+    targetPort: 3000
+
+  selector:
+
+    app: gps-server
+
+  type: LoadBalancer
+
+status:
+
+  loadBalancer: {}

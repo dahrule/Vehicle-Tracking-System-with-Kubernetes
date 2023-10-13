@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gps-server-test-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gps-server-test
+  template:
+    metadata:
+      labels:
+        app: gps-server-test
+    spec:
+      containers:
+        - name: gps-server-test
+          image: dahrule/gps-server-test:1.0
+          ports:
+            - containerPort: 3000
+          # Add any other configuration options for the container here
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gps-server-test-service
+spec:
+  selector:
+    app: gps-server-test
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: LoadBalancer
+

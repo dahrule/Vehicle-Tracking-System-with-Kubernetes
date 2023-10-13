@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: gps-server
+  name: gps-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gps-server
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: gps-server
+    spec:
+      containers:
+      - image: dahrule/gps-server:latest #sergioarmgpl/gps_server
+        name: gps-server
+        imagePullPolicy: Always
+        env:
+        - name: REDIS_HOST
+          value: "redis"
+        - name: REDIS_AUTH
+          value: "centennial"
+        - name: ENDPOINT
+          value: "http://tracking-server:3000" 
+        - name: LATITUDE
+          value: "43.82399857498332"
+        - name: LONGITUDE   
+          value: "-79.21156339275579"
+        - name: GPS_SERVER
+          value: "20.175.129.190"
+        - name: TRACKING_SERVER 
+          value: "20.200.117.174"    
+        resources: {}
+status: {}

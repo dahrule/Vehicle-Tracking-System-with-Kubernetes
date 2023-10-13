@@ -1,0 +1,57 @@
+# This architecture enables a data processing workflow where the "gps-writer" container writes data to a shared-volume.
+# The "gps-reader" container reads the data from the shared-volume, adds the CAR_ID to it, and sends the compound data to an ENDPOINT.
+# emptyDir volume is non persistent (i.e dies with the pod). 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      volumes:
+        - name: shared-volume
+          emptyDir: {} # Empty directory volume for sharing data
+
+      containers:
+        - name: gps-writer
+          image: dahrule/gps-fake-decimal:latest
+          env:
+            - name: DEVICE
+              value: "/data/device.txt" # Path to file to store geo coordinates
+            - name: INIT_LAT
+              value: "43.78548809253379" #"43.82399857498332" # Initial latitude where the vicle starts (decimal degrees) near Toronto zoo. # "43'.78548809253379"  Progress-campus
+            - name: INIT_LNG
+              value: "-79.23007210628575" #"-79.21156339275579" # Initial longitude where the vicle starts (decimal degrees) near Toronto zoo #"-79.23007210628575" Progress-campus
+            - name: REFRESH_TIME
+              value: "5" # Time in seconds to generate a new geo coordinate
+          volumeMounts:
+            - name: shared-volume
+              mountPath: /data
+
+        - name: gps-reader
+          image: dahrule/gps-reader:latest
+          env:
+            - name: DEVICE
+              value: "/data/device.txt" # Path to file to store geo coordinates
+            - name: CLIENT_ID
+              value: "2" #change this for each new client/vehicle (e.g. 2nd vehicle is 2)
+            - name: ENDPOINT
+              #value: "http://192.168.0.22:3000" # Local network testing
+              value: "http://20.175.129.190:3000" # Remote Kubernetes cluster adresse. This must be changed to the adresse assigned by the service-load balancer (gps-server-sv.yaml) when deployed.
+          volumeMounts:
+            - name: shared-volume
+              mountPath: /data
+
+
+
+
+
+    

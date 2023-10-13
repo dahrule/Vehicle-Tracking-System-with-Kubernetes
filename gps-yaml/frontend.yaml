@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  creationTimestamp: null
+
+  labels:
+
+    app: frontend
+
+  name: frontend
+
+spec:
+
+  replicas: 1
+
+  selector:
+
+    matchLabels:
+
+      app: frontend
+
+  strategy: {}
+
+  template:
+
+    metadata:
+
+      creationTimestamp: null
+
+      labels:
+
+        app: frontend
+
+    spec:
+
+      containers:
+
+      - image: sergioarmgpl/frontend
+
+        name: tracking-server
+
+        imagePullPolicy: Always
+
+        env:
+
+        - name: LATITUDE
+
+          value: "43.82399857498332" #Initial latitude to center map
+
+        - name: LONGITUDE
+
+          value: "-79.21156339275579" #Initial longitude to center map
+
+        - name: GPS_SERVER
+
+          value: "20.175.129.190" #remote kubenkubernetes cluster 
+
+        - name: TRACKING_SERVER
+
+          #value: "20.175.228.236"
+          value: "tracking-server"  
+
+        resources: {}
+
+status: {}

@@ -1,0 +1,22 @@
+apiVersion: v1
+
+kind: PersistentVolumeClaim
+
+metadata:
+
+  name: db-pv-claim-2
+
+spec:
+
+  accessModes:
+
+    - ReadWriteOnce
+
+  #storageClassName: your_driver
+
+  resources:
+
+    requests:
+
+      storage: 5Gi
+
